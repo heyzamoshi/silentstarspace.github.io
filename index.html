@@ -4,127 +4,288 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanctuary of the Silent Star</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #050505;
-            color: #eaeaea;
-            line-height: 1.7;
+        /* CSS Reset and Variables */
+        :root {
+            --bg-deep-space: #02020a;
+            --nebula-purple: rgba(59, 23, 86, 0.4);
+            --nebula-blue: rgba(14, 49, 107, 0.3);
+            --nebula-gold: rgba(121, 98, 56, 0.15);
+            --star-white: #ffffff;
+            --text-main: #f0f0f5;
+            --text-sub: #a0a0b0;
+            --accent-gold: #d4af37;
+            --font-heading: 'Marcellus', serif;
+            --font-body: 'Open Sans', sans-serif;
         }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: var(--font-body);
+            background-color: var(--bg-deep-space);
+            color: var(--text-main);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* --- Universe Background (Nebulas and Starfield) --- */
+        .universe-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                /* Subtle Nebula Layers */
+                radial-gradient(circle at 10% 20%, var(--nebula-purple) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, var(--nebula-blue) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, var(--nebula-gold) 0%, transparent 60%);
+            background-blend-mode: screen;
+        }
+
+        /* Generated Stars using Box Shadows (No Images) */
+        .starfield, .starfield:after, .starfield:before {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            /* Generating thousands of stars is done programmatically in production, 
+               this is a static representation for single file */
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            
+            animation: starsPulse 8s ease-in-out infinite alternate;
+            opacity: 0.6;
+        }
+        
+        @keyframes starsPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        /* --- Main Layout --- */
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        /* --- Top Contact Navigation --- */
+        .top-contact-nav {
+            text-align: right;
+            padding: 20px 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent-gold);
+        }
+        .top-contact-nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .top-contact-nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* --- Header Section --- */
         header {
             text-align: center;
-            padding: 20vh 20px;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            padding: 15vh 20px 10vh;
         }
         h1 {
-            font-size: 3.5rem;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            font-weight: 300;
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            margin-bottom: 15px;
         }
         .subtitle {
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-        .container {
-            max-width: 800px;
+            font-size: 1.3rem;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 40px 20px;
         }
+
+        /* --- Content Blocks --- */
+        .section-block {
+            margin-bottom: 100px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
         h2 {
-            font-size: 2rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-top: 60px;
-            font-weight: 300;
-            color: #ffffff;
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
         }
-        p {
-            font-size: 1.1rem;
-            color: #cccccc;
-            margin-bottom: 20px;
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 1px;
+            background: var(--accent-gold);
+        }
+
+        .philosophy-content p, .build-content p {
+            margin-bottom: 25px;
+            color: var(--text-main);
+        }
+
+        /* --- Journey/Timeline --- */
+        .journey-block {
+            background-color: rgba(10, 10, 20, 0.6);
+            padding: 40px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .timeline {
-            background-color: #111;
-            padding: 25px;
-            border-radius: 8px;
             margin-top: 30px;
-            border: 1px solid #222;
         }
         .timeline-item {
-            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+            align-items: center;
         }
         .timeline-item:last-child {
             margin-bottom: 0;
         }
         .timeline-date {
-            font-weight: bold;
-            color: #d4af37;
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .contact {
+        .timeline-desc {
+            color: var(--text-sub);
+        }
+
+        /* --- Footer Contact (Redundant for UX) --- */
+        footer {
             text-align: center;
-            margin-top: 80px;
-            padding: 50px 20px;
-            background-color: #0a0a0a;
-            border-top: 1px solid #222;
+            padding: 60px 0 40px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(5,5,10,0.8);
         }
-        .contact p {
-            margin: 10px 0;
+        .footer-name {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 10px;
         }
-        a {
-            color: #d4af37;
+        footer a {
+            display: block;
+            color: var(--accent-gold);
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
         }
-        a:hover {
-            color: #ffffff;
+        footer a:hover {
             text-decoration: underline;
         }
+        .copyright {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1rem; }
+            .page-wrapper { padding: 0 20px; }
+            .top-contact-nav { text-align: center; }
+            .top-contact-nav a { display: block; margin: 10px 0; }
+            .timeline-item { grid-template-columns: 1fr; gap: 5px; }
+            .timeline-date { text-align: left; }
+        }
+
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Sanctuary of the Silent Star</h1>
-    <div class="subtitle">A monument to stillness in the vastness of the dust.</div>
-</header>
+<div class="universe-background"></div>
+<div class="starfield"></div>
 
-<div class="container">
-    <h2>The Philosophy</h2>
-    <p>The Sanctuary of the Silent Star is an ancient, wise celestial traveler that has traversed the cosmos to come to rest in the open expanse of the desert. It has witnessed the chaotic birth and death of galaxies and has landed here with a singular, quiet purpose: to reward silence.</p>
-    <p>Shaped like a massive, unfolding lotus bud, its nested petals act as both a cosmic seed pod and an environmental shield. Each layer participants pass through represents the peeling away of external noise, the frantic energy of the outside world, and the distractions of the mind. In this deliberately cultivated stillness, the body grounds itself, allowing the subtle frequencies of intuition and connection to be clearly heard and felt.</p>
+<div class="page-wrapper">
+    <nav class="top-contact-nav">
+        Connect:
+        <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
+        <a href="tel:8087476169">(808) 747-6169</a>
+    </nav>
 
-    <h2>The Build</h2>
-    <p>Our studio process is guided by a simple metric: good people coming together to have a good time and create something awesome. We operate on the principle of deliberate momentum. We do not rush, but we do not waste time.</p>
-    <p>Building the Sanctuary happens at the intersection of high-tech precision—dialing in complex parametric models and running precise cuts on the CNC router—and deep human warmth. The technology allows us to build the impossible, but the shared laughter and collective dedication of the crew give the art its soul. The process is the project.</p>
+    <header>
+        <h1>Sanctuary of the Silent Star</h1>
+        <p class="subtitle">A monument to stillness in the vastness of the dust.</p>
+    </header>
 
-    <h2>The Journey</h2>
-    <div class="timeline">
-        <div class="timeline-item">
-            <span class="timeline-date">May 2026</span>
-            Fabrication and structural assembly begin in our East Bay workspace.
-        </div>
-        <div class="timeline-item">
-            <span class="timeline-date">August 2026</span>
-            The Sanctuary arrives and is constructed on the playa for Burning Man.
-        </div>
-    </div>
+    <main>
+        <section class="section-block philosophy-content">
+            <h2>The Philosophy</h2>
+            <p>The Sanctuary of the Silent Star is an ancient, wise celestial traveler that has traversed the cosmos to come to rest in the open expanse of the desert. It has witnessed the chaotic birth and death of galaxies and has landed here with a singular, quiet purpose: to reward silence.</p>
+            <p>Shaped like a massive, unfolding lotus bud, its nested petals act as both a cosmic seed pod and an environmental shield. Each layer participants pass through represents the peeling away of external noise, the frantic energy of the outside world, and the distractions of the mind. In this deliberately cultivated stillness, the body grounds itself, allowing the subtle frequencies of intuition and connection to be clearly heard and felt.</p>
+        </section>
+
+        <section class="section-block build-content">
+            <h2>The Studio</h2>
+            <p>Our studio process is guided by a simple metric: good people coming together to have a good time and create something awesome. We operate on the principle of deliberate momentum. We do not rush, but we do not waste time.</p>
+            <p>Building the Sanctuary happens at the intersection of high-tech precision—dialing in complex parametric models and running precise cuts on the CNC router—and deep human warmth. The technology allows us to build the impossible, but the shared laughter and collective dedication of the crew give the art its soul. The process is the project.</p>
+        </section>
+
+        <section class="section-block journey-block">
+            <h2>The Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">May 2026</span>
+                    <span class="timeline-desc">Fabrication and structural assembly begin in our East Bay workspace.</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">August 2026</span>
+                    <span class="timeline-desc">The Sanctuary arrives and is constructed on the playa for Burning Man.</span>
+                </div>
+            </div>
+        </section>
+    </main>
 </div>
 
-<div class="contact">
-    <h2>Connect With Us</h2>
-    <p>If you'd like to get involved, contribute, or learn more about the project, reach out to Mike.</p>
-    <p>
-        <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a><br>
-        <a href="tel:808-747-6169">808-747-6169</a>
-    </p>
-</div>
+<footer>
+    <div class="footer-name">Mike</div>
+    <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
+    <a href="tel:8087476169">(808) 747-6169</a>
+    <div class="copyright">&copy; 2026 SilentStarSpace.com</div>
+</footer>
 
 </body>
 </html>
