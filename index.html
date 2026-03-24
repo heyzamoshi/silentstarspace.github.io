@@ -1,261 +1,830 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanctuary of the Silent Star</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- Global Resets & Typography --- */
-        :root {
-            --bg-color: #020205;
-            --text-main: #e0e0e0;
-            --text-muted: #888899;
-            --font-heading: 'Cormorant Garamond', serif;
-            --font-body: 'Montserrat', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanctuary of the Silent Star</title>
+  <meta
+    name="description"
+    content="Sanctuary of the Silent Star — a contemplative lotus sanctuary bound for Burning Man 2026. Build in the Bay Area in May. Reach out to get involved."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+  <style>
+    :root {
+      --bg: #04050a;
+      --bg-deep: #020308;
+      --panel: rgba(12, 14, 24, 0.52);
+      --panel-strong: rgba(12, 14, 24, 0.74);
+      --text: #edf0ff;
+      --muted: #b2b8d3;
+      --soft: #8891b5;
+      --line: rgba(197, 211, 255, 0.16);
+      --glow: rgba(171, 189, 255, 0.12);
+      --accent: #d8e2ff;
+      --max: 1160px;
+      --heading: 'Cormorant Garamond', serif;
+      --body: 'Inter', sans-serif;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
 
-        /* --- The Intro Sequence --- */
-        #intro-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            animation: hideOverlay 1s forwards 10s; /* Hides overlay after 10s */
-            pointer-events: none;
-        }
+    * { box-sizing: border-box; }
 
-        .intro-phrase {
-            position: absolute;
-            opacity: 0;
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: #fff;
-            text-align: center;
-            padding: 0 20px;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        /* Timing the sequence */
-        #phrase-1 { animation: fadePhrase 3s ease-in-out forwards 0.5s; }
-        #phrase-2 { animation: fadePhrase 3s ease-in-out forwards 3.5s; }
-        #phrase-3 { animation: fadePhrase 4s ease-in-out forwards 6.5s; }
+    body {
+      margin: 0;
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(102, 125, 255, 0.13), transparent 24%),
+        radial-gradient(circle at 80% 18%, rgba(168, 89, 255, 0.10), transparent 26%),
+        radial-gradient(circle at 68% 72%, rgba(73, 155, 255, 0.09), transparent 24%),
+        radial-gradient(circle at 28% 78%, rgba(255, 190, 140, 0.06), transparent 18%),
+        linear-gradient(180deg, #05060c 0%, #020308 45%, #03040a 100%);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-        @keyframes fadePhrase {
-            0% { opacity: 0; transform: translateY(10px); }
-            30% { opacity: 1; transform: translateY(0); }
-            70% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
-        }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        @keyframes hideOverlay {
-            to { opacity: 0; visibility: hidden; }
-        }
+    #starfield,
+    #dustfield {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -3;
+    }
 
-        /* --- Starfield Background --- */
-        canvas#starfield {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            opacity: 0.8;
-        }
+    #dustfield {
+      z-index: -2;
+      opacity: 0.7;
+      filter: blur(0.2px);
+    }
 
-        /* --- Layout & Sections --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            position: relative;
-        }
+    .nebula-layer {
+      position: fixed;
+      inset: -10%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.7;
+      background:
+        radial-gradient(40% 30% at 18% 22%, rgba(129, 123, 255, 0.18), transparent 60%),
+        radial-gradient(30% 22% at 74% 18%, rgba(205, 110, 255, 0.12), transparent 70%),
+        radial-gradient(32% 24% at 74% 72%, rgba(87, 145, 255, 0.12), transparent 65%),
+        radial-gradient(24% 18% at 28% 74%, rgba(255, 220, 165, 0.08), transparent 68%);
+      animation: drift 28s ease-in-out infinite alternate;
+    }
 
-        .top-contact {
-            position: absolute;
-            top: 40px;
-            width: 100%;
-            text-align: center;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(-1.5%, 1.5%, 0) scale(1.04); }
+    }
 
-        .top-contact a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin: 0 15px;
-            transition: color 0.5s ease;
-        }
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(1, 2, 5, 0.97);
+      display: grid;
+      place-items: center;
+      z-index: 20;
+      animation: hideOverlay 1.2s ease forwards 9.5s;
+      pointer-events: none;
+    }
 
-        .top-contact a:hover { color: #fff; }
+    .intro-stage {
+      position: relative;
+      width: min(88vw, 720px);
+      height: 100px;
+    }
 
-        h1 {
-            font-family: var(--font-heading);
-            font-size: clamp(3rem, 6vw, 5.5rem);
-            font-weight: 300;
-            letter-spacing: 6px;
-            margin: 0 0 20px 0;
-            text-transform: uppercase;
-        }
+    .intro-line {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-family: var(--heading);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: clamp(1.25rem, 3vw, 2.25rem);
+      color: #f5f7ff;
+      opacity: 0;
+      transform: translateY(12px);
+    }
 
-        .status {
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 60px;
-        }
+    .intro-line:nth-child(1) { animation: introFade 2.8s ease 0.4s forwards; }
+    .intro-line:nth-child(2) { animation: introFade 2.8s ease 3.0s forwards; }
+    .intro-line:nth-child(3) { animation: introFade 3.0s ease 5.8s forwards; }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            text-decoration: none;
-            animation: bounce 2s infinite;
-        }
+    @keyframes introFade {
+      0% { opacity: 0; transform: translateY(12px); }
+      20%, 70% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
+    @keyframes hideOverlay {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
 
-        .content-section {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 100px 20px 150px;
-            text-align: center;
-        }
+    .site-shell {
+      position: relative;
+      z-index: 1;
+    }
 
-        h2 {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-            color: #fff;
-        }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(4, 5, 10, 0.82), rgba(4, 5, 10, 0.35));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
 
-        p {
-            font-size: 1rem;
-            line-height: 2.2;
-            font-weight: 200;
-            color: #cccccc;
-            margin-bottom: 30px;
-        }
+    .topbar-inner {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
 
-        /* --- Mobile Optimizations --- */
-        @media (max-width: 600px) {
-            .top-contact a { display: block; margin: 10px 0; }
-            .intro-phrase { font-size: 1.5rem; }
-        }
-    </style>
+    .transmission {
+      font-size: 0.76rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: center;
+      color: var(--soft);
+      font-size: 0.9rem;
+    }
+
+    .top-links a {
+      transition: color 180ms ease, opacity 180ms ease;
+      opacity: 0.92;
+    }
+
+    .top-links a:hover,
+    .top-links a:focus-visible {
+      color: var(--text);
+      opacity: 1;
+    }
+
+    .hero {
+      min-height: calc(100vh - 70px);
+      display: grid;
+      place-items: center;
+      padding: 70px 16px 56px;
+    }
+
+    .hero-card {
+      width: min(100%, 980px);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(10, 12, 22, 0.45), rgba(6, 8, 14, 0.62));
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      padding: clamp(28px, 5vw, 64px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), transparent 24%),
+        radial-gradient(circle at 50% 5%, rgba(255,255,255,0.08), transparent 25%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      font-size: 0.78rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--heading);
+      font-weight: 400;
+      font-size: clamp(3.2rem, 9vw, 6.8rem);
+      line-height: 0.95;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-subtitle {
+      width: min(100%, 720px);
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 2vw, 1.18rem);
+      line-height: 1.9;
+      font-weight: 300;
+    }
+
+    .mantra {
+      margin: 34px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      color: var(--accent);
+      font-size: 0.88rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .mantra span {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button,
+    .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .button {
+      background: rgba(233, 239, 255, 0.94);
+      color: #0b1020;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(208, 219, 255, 0.15);
+    }
+
+    .button-secondary {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .button:hover,
+    .button-secondary:hover,
+    .button:focus-visible,
+    .button-secondary:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .timeline-strip {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .timeline-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.035);
+      padding: 18px 18px 20px;
+      text-align: left;
+    }
+
+    .timeline-label {
+      font-size: 0.76rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: 0 0 6px;
+      font-weight: 500;
+    }
+
+    .timeline-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.94rem;
+    }
+
+    main {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding-bottom: 96px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 20px;
+      align-items: start;
+      margin-top: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: clamp(24px, 4vw, 36px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel + .panel,
+    .stack > .panel + .panel {
+      margin-top: 20px;
+    }
+
+    .kicker {
+      font-size: 0.74rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-family: var(--heading);
+      font-weight: 400;
+      line-height: 1;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      line-height: 1.95;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .quote {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-left: 2px solid rgba(221, 230, 255, 0.26);
+      background: rgba(255,255,255,0.03);
+      border-radius: 0 18px 18px 0;
+      color: var(--text);
+      font-family: var(--heading);
+      font-size: 1.35rem;
+      line-height: 1.5;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .mini-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .mini-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .mini-item span {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .contact-card {
+      margin-top: 24px;
+      background: linear-gradient(180deg, rgba(15, 18, 30, 0.78), rgba(8, 10, 18, 0.78));
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .contact-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .contact-card p {
+      margin-bottom: 18px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font-size: 0.94rem;
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .contact-link:hover,
+    .contact-link:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    footer {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 0 0 48px;
+      text-align: center;
+      color: var(--soft);
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .hero-card {
+        border-radius: 24px;
+      }
+
+      .contact-links,
+      .hero-actions,
+      .mantra {
+        justify-content: center;
+      }
+
+      .intro-stage {
+        height: 120px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .intro-overlay,
+      .intro-line,
+      .nebula-layer {
+        animation: none !important;
+      }
+      .button,
+      .button-secondary,
+      .contact-link {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <div id="intro-overlay">
-        <div class="intro-phrase" id="phrase-1">Enter space.</div>
-        <div class="intro-phrase" id="phrase-2">Be quiet.</div>
-        <div class="intro-phrase" id="phrase-3">Enjoy a moment of peace.</div>
+  <div class="intro-overlay" aria-hidden="true">
+    <div class="intro-stage">
+      <div class="intro-line">Enter the space.</div>
+      <div class="intro-line">Find silence.</div>
+      <div class="intro-line">Enjoy the peace.</div>
     </div>
+  </div>
 
-    <canvas id="starfield"></canvas>
+  <canvas id="starfield"></canvas>
+  <canvas id="dustfield"></canvas>
+  <div class="nebula-layer"></div>
+
+  <div class="site-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="transmission">Transmissions coming soon</div>
+        <nav class="top-links" aria-label="Top links">
+          <a href="#timeline">Timeline</a>
+          <a href="#piece">The Piece</a>
+          <a href="#process">The Process</a>
+          <a href="#involved">Get Involved</a>
+        </nav>
+      </div>
+    </header>
 
     <section class="hero">
-        <div class="top-contact">
-            <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
-            <a href="tel:8087476169">808.747.6169</a>
+      <div class="hero-card">
+        <div class="eyebrow">A sanctuary for stillness</div>
+        <h1>Sanctuary of the Silent Star</h1>
+        <p class="hero-subtitle">
+          A contemplative structure rooted in silence, presence, and beauty — being built in the Bay Area in <strong>May 2026</strong> and brought to <strong>Burning Man in August 2026</strong>.
+        </p>
+
+        <div class="mantra" aria-label="Intro phrases">
+          <span>Enter the space</span>
+          <span>Find silence</span>
+          <span>Enjoy the peace</span>
         </div>
-        
-        <h1>Silent Star</h1>
-        <div class="status">Transmission Arriving Soon...</div>
-        
-        <a href="#philosophy" class="scroll-indicator">Scroll to Discover</a>
+
+        <div class="hero-actions">
+          <a class="button" href="#involved">Want to get involved?</a>
+          <a class="button-secondary" href="#piece">Learn more</a>
+        </div>
+
+        <div class="timeline-strip" id="timeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Build</div>
+            <h3 class="timeline-title">May 2026 · Bay Area</h3>
+            <p class="timeline-copy">
+              Design refinement, fabrication, and the physical building of the sanctuary begin in the Bay Area.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Arrival</div>
+            <h3 class="timeline-title">August 2026 · Burning Man</h3>
+            <p class="timeline-copy">
+              The sanctuary travels to the desert to become a place of rest, quiet, and shared stillness.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="philosophy" class="content-section">
-        <h2>The Philosophy</h2>
-        <p>The Sanctuary of the Silent Star is an ancient, wise celestial traveler that has traversed the cosmos to come to rest in the open expanse of the desert. It has witnessed the chaotic birth and death of galaxies and has landed here with a singular, quiet purpose: to reward silence.</p>
-        <p>Shaped like a massive, unfolding lotus bud, its nested petals act as both a cosmic seed pod and an environmental shield. Each layer participants pass through represents the peeling away of external noise, the frantic energy of the outside world, and the distractions of the mind. In this deliberately cultivated stillness, the body grounds itself, allowing the subtle frequencies of intuition and connection to be clearly heard and felt.</p>
-    </section>
+    <main>
+      <section class="section-grid">
+        <div class="panel" id="piece">
+          <div class="kicker">Philosophy of the piece</div>
+          <h2>Silence is not empty.</h2>
+          <p>
+            The Sanctuary of the Silent Star is an invitation to step out of noise and into presence. It is not designed to overwhelm. It is designed to soften the nervous system, open attention, and make room for a more subtle kind of experience.
+          </p>
+          <p>
+            The movement through the structure reflects a simple inner passage: enter the space, find silence, enjoy the peace. Each threshold asks for a little less speed, a little less performance, and a little more listening.
+          </p>
+          <p>
+            The piece treats silence as a living force. Not the absence of sound, but the presence of clarity. Not withdrawal from life, but a return to what is most real beneath distraction.
+          </p>
+          <div class="quote">
+            In a world of acceleration, the sanctuary offers a rare thing: a place to become quiet enough to hear yourself again.
+          </div>
+        </div>
 
-    <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height, stars = [];
+        <div class="stack">
+          <div class="panel" id="process">
+            <div class="kicker">Philosophy of the process</div>
+            <h2>Built with care.</h2>
+            <p>
+              The process matters as much as the form. This project is being shaped through patience, iteration, craft, engineering, and collaboration. Beauty is not being treated as decoration. It is being treated as a discipline.
+            </p>
+            <p>
+              The work asks how a structure can be both poetic and buildable — how an idea can travel from vision to fabrication to shared experience without losing its soul.
+            </p>
+          </div>
 
-        function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            stars = [];
-            // Generate stars based on screen size (more on desktop, fewer on mobile)
-            const numStars = Math.floor((width * height) / 2000); 
-            
-            for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 1.5,
-                    opacity: Math.random(),
-                    speed: (Math.random() * 0.05) + 0.01 // Subtle drifting speed
-                });
-            }
+          <div class="panel">
+            <div class="kicker">What this project values</div>
+            <div class="mini-list">
+              <div class="mini-item">
+                <strong>Stillness</strong>
+                <span>A place to pause, reset, and listen more deeply.</span>
+              </div>
+              <div class="mini-item">
+                <strong>Craft</strong>
+                <span>Careful design, thoughtful construction, and reverence for materials.</span>
+              </div>
+              <div class="mini-item">
+                <strong>Participation</strong>
+                <span>A shared work of imagination, building, and presence.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="involved" style="margin-top: 20px;">
+        <div class="kicker">Get involved</div>
+        <h2>Want to learn more or help bring it to life?</h2>
+        <p>
+          Reach out if you want to get involved with the project, support the build, collaborate, or simply learn more about what is coming.
+        </p>
+
+        <div class="contact-card">
+          <h3>Let’s talk.</h3>
+          <p>
+            The sanctuary is growing now. If something about it speaks to you, make contact.
+          </p>
+          <div class="contact-links">
+            <a class="contact-link" href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
+            <a class="contact-link" href="tel:+18087476169">808-747-6169</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Sanctuary of the Silent Star · Bay Area build in May 2026 · Burning Man in August 2026
+    </footer>
+  </div>
+
+  <script>
+    const starCanvas = document.getElementById('starfield');
+    const dustCanvas = document.getElementById('dustfield');
+    const starCtx = starCanvas.getContext('2d');
+    const dustCtx = dustCanvas.getContext('2d');
+
+    let width = 0;
+    let height = 0;
+    let stars = [];
+    let dust = [];
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function resizeCanvases() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      [starCanvas, dustCanvas].forEach((canvas) => {
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+      });
+
+      starCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      dustCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      buildScene();
+    }
+
+    function buildScene() {
+      const starCount = Math.max(110, Math.floor((width * height) / 8500));
+      const dustCount = Math.max(40, Math.floor((width * height) / 22000));
+
+      stars = Array.from({ length: starCount }, () => ({
+        x: random(0, width),
+        y: random(0, height),
+        r: random(0.35, 1.65),
+        a: random(0.18, 0.95),
+        twinkle: random(0.003, 0.018),
+        driftX: random(-0.015, 0.015),
+        driftY: random(-0.03, -0.005)
+      }));
+
+      dust = Array.from({ length: dustCount }, () => ({
+        x: random(0, width),
+        y: random(0, height),
+        r: random(40, 130),
+        a: random(0.012, 0.045),
+        hue: random(210, 295),
+        vx: random(-0.03, 0.03),
+        vy: random(-0.015, 0.02)
+      }));
+    }
+
+    function drawDust() {
+      dustCtx.clearRect(0, 0, width, height);
+      dust.forEach((cloud) => {
+        const gradient = dustCtx.createRadialGradient(
+          cloud.x,
+          cloud.y,
+          0,
+          cloud.x,
+          cloud.y,
+          cloud.r
+        );
+
+        gradient.addColorStop(0, `hsla(${cloud.hue}, 85%, 72%, ${cloud.a})`);
+        gradient.addColorStop(0.45, `hsla(${cloud.hue}, 85%, 60%, ${cloud.a * 0.45})`);
+        gradient.addColorStop(1, `hsla(${cloud.hue}, 85%, 50%, 0)`);
+
+        dustCtx.fillStyle = gradient;
+        dustCtx.beginPath();
+        dustCtx.arc(cloud.x, cloud.y, cloud.r, 0, Math.PI * 2);
+        dustCtx.fill();
+
+        cloud.x += cloud.vx;
+        cloud.y += cloud.vy;
+
+        if (cloud.x < -cloud.r) cloud.x = width + cloud.r;
+        if (cloud.x > width + cloud.r) cloud.x = -cloud.r;
+        if (cloud.y < -cloud.r) cloud.y = height + cloud.r;
+        if (cloud.y > height + cloud.r) cloud.y = -cloud.r;
+      });
+    }
+
+    function drawStars() {
+      starCtx.clearRect(0, 0, width, height);
+
+      stars.forEach((star) => {
+        star.a += (Math.random() - 0.5) * star.twinkle;
+        if (star.a < 0.12) star.a = 0.12;
+        if (star.a > 1) star.a = 1;
+
+        star.x += star.driftX;
+        star.y += star.driftY;
+
+        if (star.y < -2) {
+          star.y = height + 2;
+          star.x = random(0, width);
         }
+        if (star.x < -2) star.x = width + 2;
+        if (star.x > width + 2) star.x = -2;
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-                ctx.fill();
+        starCtx.beginPath();
+        starCtx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        starCtx.fillStyle = `rgba(255,255,255,${star.a})`;
+        starCtx.shadowBlur = star.r < 1 ? 0 : 8;
+        starCtx.shadowColor = 'rgba(255,255,255,0.25)';
+        starCtx.fill();
+        starCtx.shadowBlur = 0;
+      });
+    }
 
-                // Gentle drift upwards
-                star.y -= star.speed;
-                
-                // Twinkle effect
-                star.opacity += (Math.random() - 0.5) * 0.02;
-                if(star.opacity < 0.1) star.opacity = 0.1;
-                if(star.opacity > 1) star.opacity = 1;
+    function animate() {
+      drawDust();
+      drawStars();
+      requestAnimationFrame(animate);
+    }
 
-                // Reset star if it drifts off screen
-                if (star.y < 0) {
-                    star.y = height;
-                    star.x = Math.random() * width;
-                }
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', init);
-        
-        // Start the magic
-        init();
-        animate();
-    </script>
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+    animate();
+  </script>
 </body>
 </html>
