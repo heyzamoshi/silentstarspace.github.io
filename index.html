@@ -6,286 +6,256 @@
     <title>Sanctuary of the Silent Star</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS Reset and Variables */
+        /* --- Global Resets & Typography --- */
         :root {
-            --bg-deep-space: #02020a;
-            --nebula-purple: rgba(59, 23, 86, 0.4);
-            --nebula-blue: rgba(14, 49, 107, 0.3);
-            --nebula-gold: rgba(121, 98, 56, 0.15);
-            --star-white: #ffffff;
-            --text-main: #f0f0f5;
-            --text-sub: #a0a0b0;
-            --accent-gold: #d4af37;
-            --font-heading: 'Marcellus', serif;
-            --font-body: 'Open Sans', sans-serif;
+            --bg-color: #020205;
+            --text-main: #e0e0e0;
+            --text-muted: #888899;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            font-family: var(--font-body);
-            background-color: var(--bg-deep-space);
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.8;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- The Intro Sequence --- */
+        #intro-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            animation: hideOverlay 1s forwards 10s; /* Hides overlay after 10s */
+            pointer-events: none;
+        }
+
+        .intro-phrase {
+            position: absolute;
+            opacity: 0;
+            font-family: var(--font-heading);
+            font-size: 2rem;
             font-weight: 300;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            padding: 0 20px;
         }
 
-        /* --- Universe Background (Nebulas and Starfield) --- */
-        .universe-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: 
-                /* Subtle Nebula Layers */
-                radial-gradient(circle at 10% 20%, var(--nebula-purple) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, var(--nebula-blue) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, var(--nebula-gold) 0%, transparent 60%);
-            background-blend-mode: screen;
+        /* Timing the sequence */
+        #phrase-1 { animation: fadePhrase 3s ease-in-out forwards 0.5s; }
+        #phrase-2 { animation: fadePhrase 3s ease-in-out forwards 3.5s; }
+        #phrase-3 { animation: fadePhrase 4s ease-in-out forwards 6.5s; }
+
+        @keyframes fadePhrase {
+            0% { opacity: 0; transform: translateY(10px); }
+            30% { opacity: 1; transform: translateY(0); }
+            70% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
         }
 
-        /* Generated Stars using Box Shadows (No Images) */
-        .starfield, .starfield:after, .starfield:before {
+        @keyframes hideOverlay {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* --- Starfield Background --- */
+        canvas#starfield {
             position: fixed;
-            top: 0; right: 0; bottom: 0; left: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            /* Generating thousands of stars is done programmatically in production, 
-               this is a static representation for single file */
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            
-            animation: starsPulse 8s ease-in-out infinite alternate;
-            opacity: 0.6;
-        }
-        
-        @keyframes starsPulse {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.8; }
+            opacity: 0.8;
         }
 
-        /* --- Main Layout --- */
-        .page-wrapper {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 40px;
+        /* --- Layout & Sections --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
             position: relative;
         }
 
-        /* --- Top Contact Navigation --- */
-        .top-contact-nav {
-            text-align: right;
-            padding: 20px 0;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+        .top-contact {
+            position: absolute;
+            top: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--accent-gold);
-        }
-        .top-contact-nav a {
-            color: var(--text-main);
-            text-decoration: none;
-            margin-left: 20px;
-            transition: color 0.3s;
-        }
-        .top-contact-nav a:hover {
-            color: var(--accent-gold);
         }
 
-        /* --- Header Section --- */
-        header {
-            text-align: center;
-            padding: 15vh 20px 10vh;
+        .top-contact a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.5s ease;
         }
+
+        .top-contact a:hover { color: #fff; }
+
         h1 {
             font-family: var(--font-heading);
-            font-size: 4rem;
-            margin: 0;
-            font-weight: 400;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(255,255,255,0.5);
-            margin-bottom: 15px;
-        }
-        .subtitle {
-            font-size: 1.3rem;
-            color: var(--text-sub);
-            letter-spacing: 2px;
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 300;
+            letter-spacing: 6px;
+            margin: 0 0 20px 0;
             text-transform: uppercase;
-            max-width: 600px;
-            margin: 0 auto;
         }
 
-        /* --- Content Blocks --- */
-        .section-block {
-            margin-bottom: 100px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        .status {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .content-section {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 100px 20px 150px;
+            text-align: center;
         }
 
         h2 {
             font-family: var(--font-heading);
-            font-size: 2.2rem;
-            font-weight: 400;
-            color: var(--accent-gold);
-            margin-bottom: 30px;
-            position: relative;
-            display: inline-block;
-        }
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 1px;
-            background: var(--accent-gold);
-        }
-
-        .philosophy-content p, .build-content p {
-            margin-bottom: 25px;
-            color: var(--text-main);
-        }
-
-        /* --- Journey/Timeline --- */
-        .journey-block {
-            background-color: rgba(10, 10, 20, 0.6);
-            padding: 40px;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .timeline {
-            margin-top: 30px;
-        }
-        .timeline-item {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
-            align-items: center;
-        }
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-        .timeline-date {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--accent-gold);
-            text-align: right;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .timeline-desc {
-            color: var(--text-sub);
-        }
-
-        /* --- Footer Contact (Redundant for UX) --- */
-        footer {
-            text-align: center;
-            padding: 60px 0 40px;
-            margin-top: 100px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: rgba(5,5,10,0.8);
-        }
-        .footer-name {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
             color: #fff;
-            margin-bottom: 10px;
-        }
-        footer a {
-            display: block;
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        .copyright {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: #555;
         }
 
-        /* --- Responsiveness --- */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .subtitle { font-size: 1rem; }
-            .page-wrapper { padding: 0 20px; }
-            .top-contact-nav { text-align: center; }
-            .top-contact-nav a { display: block; margin: 10px 0; }
-            .timeline-item { grid-template-columns: 1fr; gap: 5px; }
-            .timeline-date { text-align: left; }
+        p {
+            font-size: 1rem;
+            line-height: 2.2;
+            font-weight: 200;
+            color: #cccccc;
+            margin-bottom: 30px;
         }
 
+        /* --- Mobile Optimizations --- */
+        @media (max-width: 600px) {
+            .top-contact a { display: block; margin: 10px 0; }
+            .intro-phrase { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-<div class="universe-background"></div>
-<div class="starfield"></div>
+    <div id="intro-overlay">
+        <div class="intro-phrase" id="phrase-1">Enter space.</div>
+        <div class="intro-phrase" id="phrase-2">Be quiet.</div>
+        <div class="intro-phrase" id="phrase-3">Enjoy a moment of peace.</div>
+    </div>
 
-<div class="page-wrapper">
-    <nav class="top-contact-nav">
-        Connect:
-        <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
-        <a href="tel:8087476169">(808) 747-6169</a>
-    </nav>
+    <canvas id="starfield"></canvas>
 
-    <header>
-        <h1>Sanctuary of the Silent Star</h1>
-        <p class="subtitle">A monument to stillness in the vastness of the dust.</p>
-    </header>
+    <section class="hero">
+        <div class="top-contact">
+            <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
+            <a href="tel:8087476169">808.747.6169</a>
+        </div>
+        
+        <h1>Silent Star</h1>
+        <div class="status">Transmission Arriving Soon...</div>
+        
+        <a href="#philosophy" class="scroll-indicator">Scroll to Discover</a>
+    </section>
 
-    <main>
-        <section class="section-block philosophy-content">
-            <h2>The Philosophy</h2>
-            <p>The Sanctuary of the Silent Star is an ancient, wise celestial traveler that has traversed the cosmos to come to rest in the open expanse of the desert. It has witnessed the chaotic birth and death of galaxies and has landed here with a singular, quiet purpose: to reward silence.</p>
-            <p>Shaped like a massive, unfolding lotus bud, its nested petals act as both a cosmic seed pod and an environmental shield. Each layer participants pass through represents the peeling away of external noise, the frantic energy of the outside world, and the distractions of the mind. In this deliberately cultivated stillness, the body grounds itself, allowing the subtle frequencies of intuition and connection to be clearly heard and felt.</p>
-        </section>
+    <section id="philosophy" class="content-section">
+        <h2>The Philosophy</h2>
+        <p>The Sanctuary of the Silent Star is an ancient, wise celestial traveler that has traversed the cosmos to come to rest in the open expanse of the desert. It has witnessed the chaotic birth and death of galaxies and has landed here with a singular, quiet purpose: to reward silence.</p>
+        <p>Shaped like a massive, unfolding lotus bud, its nested petals act as both a cosmic seed pod and an environmental shield. Each layer participants pass through represents the peeling away of external noise, the frantic energy of the outside world, and the distractions of the mind. In this deliberately cultivated stillness, the body grounds itself, allowing the subtle frequencies of intuition and connection to be clearly heard and felt.</p>
+    </section>
 
-        <section class="section-block build-content">
-            <h2>The Studio</h2>
-            <p>Our studio process is guided by a simple metric: good people coming together to have a good time and create something awesome. We operate on the principle of deliberate momentum. We do not rush, but we do not waste time.</p>
-            <p>Building the Sanctuary happens at the intersection of high-tech precision—dialing in complex parametric models and running precise cuts on the CNC router—and deep human warmth. The technology allows us to build the impossible, but the shared laughter and collective dedication of the crew give the art its soul. The process is the project.</p>
-        </section>
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height, stars = [];
 
-        <section class="section-block journey-block">
-            <h2>The Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <span class="timeline-date">May 2026</span>
-                    <span class="timeline-desc">Fabrication and structural assembly begin in our East Bay workspace.</span>
-                </div>
-                <div class="timeline-item">
-                    <span class="timeline-date">August 2026</span>
-                    <span class="timeline-desc">The Sanctuary arrives and is constructed on the playa for Burning Man.</span>
-                </div>
-            </div>
-        </section>
-    </main>
-</div>
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            stars = [];
+            // Generate stars based on screen size (more on desktop, fewer on mobile)
+            const numStars = Math.floor((width * height) / 2000); 
+            
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    opacity: Math.random(),
+                    speed: (Math.random() * 0.05) + 0.01 // Subtle drifting speed
+                });
+            }
+        }
 
-<footer>
-    <div class="footer-name">Mike</div>
-    <a href="mailto:zamoshi@proton.me">zamoshi@proton.me</a>
-    <a href="tel:8087476169">(808) 747-6169</a>
-    <div class="copyright">&copy; 2026 SilentStarSpace.com</div>
-</footer>
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
 
+                // Gentle drift upwards
+                star.y -= star.speed;
+                
+                // Twinkle effect
+                star.opacity += (Math.random() - 0.5) * 0.02;
+                if(star.opacity < 0.1) star.opacity = 0.1;
+                if(star.opacity > 1) star.opacity = 1;
+
+                // Reset star if it drifts off screen
+                if (star.y < 0) {
+                    star.y = height;
+                    star.x = Math.random() * width;
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        
+        // Start the magic
+        init();
+        animate();
+    </script>
 </body>
 </html>
