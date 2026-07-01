@@ -10,16 +10,42 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script>
+    const root = document.documentElement;
+    let shouldPlayIntro = true;
+
     try {
       const referrer = document.referrer ? new URL(document.referrer) : null;
       if (referrer && referrer.origin === window.location.origin) {
-        document.documentElement.classList.add("skip-intro");
+        shouldPlayIntro = false;
       }
     } catch (error) {
       // Keep the intro if the referrer cannot be read.
     }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      shouldPlayIntro = false;
+    }
+
+    if (shouldPlayIntro) {
+      root.classList.add("intro-running");
+    } else {
+      root.classList.add("skip-intro");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!root.classList.contains("intro-running")) return;
+
+      const overlay = document.querySelector(".intro-overlay");
+      const unlockScroll = () => root.classList.remove("intro-running");
+
+      overlay?.addEventListener("animationend", (event) => {
+        if (event.target === overlay) unlockScroll();
+      });
+
+      window.setTimeout(unlockScroll, 10000);
+    });
   </script>
-  <link rel="stylesheet" href="styles.css?v=20260628" />
+  <link rel="stylesheet" href="styles.css?v=20260701" />
 </head>
 <body>
   <div class="intro-overlay" aria-hidden="true">
